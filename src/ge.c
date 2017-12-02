@@ -2,6 +2,8 @@
 
 #include "error.c"
 
+iconv_t ge_utf8ToUnicode = (iconv_t)-1;
+
 GEfloat ge_color[4];
 
 FT_Library ge_ft_library = 0;
@@ -125,6 +127,9 @@ GEint geInit(GEint width, GEint height, const GEchar* title) {
 	GLuint fragmentShader = 0;
 	GLint status;
 	GLint infoLogLength;
+	
+	//ge_utf8ToUnicode = iconv_open("UTF-32", "UTF-8");
+	ge_utf8ToUnicode = iconv_open("wchar_t", "utf-8");
 	
 	ge_screenWidth = width;
 	ge_screenHeight = height;
@@ -323,6 +328,10 @@ void geTerminate() {
 	if (ge_window) {
 		glfwDestroyWindow(ge_window);
 		ge_window = GE_NULL;
+	}
+	if (ge_utf8ToUnicode != (iconv_t)-1) {
+		iconv_close(ge_utf8ToUnicode);
+		ge_utf8ToUnicode = (iconv_t)-1;
 	}
 	glfwTerminate();	
 }

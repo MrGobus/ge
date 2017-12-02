@@ -195,6 +195,31 @@ void geDrawUnicodeString(GEfont* font, GEint x, GEint y, const GEunicodeCharacte
 }
 
 /**
+	Выводит unicode строку 
+	@param font - шрифт
+	@param x - x
+	@param y - y
+	@param string - unicode строка
+*/
+
+void geDrawUtf8String(GEfont* font, GEint x, GEint y, const GEchar* string) {
+	size_t stringLength = strlen(string);
+	size_t utf8bufferLength = stringLength * sizeof(GEunicodeCharacter);
+	GEchar* buffer = (GEchar*)malloc(stringLength + 1);
+	strcpy(buffer, string);
+	GEunicodeCharacter* utf8buffer = (GEunicodeCharacter*)malloc(utf8bufferLength + sizeof(GEchar));
+	GEchar* utf8bufferStart = (char*)utf8buffer;
+	GEchar* stringBufferStart = buffer;
+	if (ge_utf8ToUnicode) {
+		iconv(ge_utf8ToUnicode, &stringBufferStart, &stringLength, &utf8bufferStart, &utf8bufferLength);
+	}
+	geDrawUnicodeString(font, x, y, utf8buffer);
+	utf8buffer[stringLength] = 0;
+	free(utf8buffer);
+	free(buffer);
+}
+
+/**
 	Установить размер шрифта
 	@param font - шрифт
 	@param size - размер

@@ -1,6 +1,8 @@
 #ifndef _GE_H_
 #define _GE_H_
 
+#include <iconv.h>
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -104,6 +106,7 @@ GEglyph* geGetGlyph(GEfont* font, GEunicodeCharacter character);
 void geDrawGlyph(GEglyph* glyph, GEint x, GEint y);
 void geDrawUnicodeCharacter(GEfont* font, GEint x, GEint y, GEunicodeCharacter character);
 void geDrawUnicodeString(GEfont* font, GEint x, GEint y, const GEunicodeCharacter* string);
+void geDrawUtf8String(GEfont* font, GEint x, GEint y, const GEchar* string);
 
 GEint geGetScreenWidth();
 GEint geGetScreenHeight();

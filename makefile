@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall `pkg-config --cflags freetype2`
-LFLAGS = -lglfw3 -lglew32 -lopengl32 -lIL -lfreetype
+LFLAGS = -lglfw3 -lglew32 -lopengl32 -lIL -lfreetype -liconv
 TARGET = main.exe
 
 default: clear
