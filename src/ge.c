@@ -154,6 +154,8 @@ GEint geInit(GEint width, GEint height, const GEchar* title) {
 	glfwGetWindowSize(ge_window, &ge_screenWidth, &ge_screenHeight);
 	glfwMakeContextCurrent(ge_window);
 	
+	glfwSwapInterval(1);
+
 	// GLEW
 	glewExperimental = GE_TRUE;
 	GLenum glewInitResult = glewInit();
