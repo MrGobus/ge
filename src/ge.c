@@ -1,4 +1,4 @@
-#include "ge.h"
+#include "../include/ge.h"
 
 #include "error.c"
 

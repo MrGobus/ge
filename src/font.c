@@ -204,6 +204,7 @@ void geDrawUnicodeString(GEfont* font, GEint x, GEint y, const GEunicodeCharacte
 
 void geDrawUtf8String(GEfont* font, GEint x, GEint y, const GEchar* string) {
 	size_t stringLength = strlen(string);
+	size_t stringLengthCopy = stringLength;
 	size_t utf8bufferLength = stringLength * sizeof(GEunicodeCharacter);
 	GEchar* buffer = (GEchar*)malloc(stringLength + 1);
 	strcpy(buffer, string);
@@ -213,8 +214,8 @@ void geDrawUtf8String(GEfont* font, GEint x, GEint y, const GEchar* string) {
 	if (ge_utf8ToUnicode) {
 		iconv(ge_utf8ToUnicode, &stringBufferStart, &stringLength, &utf8bufferStart, &utf8bufferLength);
 	}
+	utf8buffer[stringLengthCopy] = 0;
 	geDrawUnicodeString(font, x, y, utf8buffer);
-	utf8buffer[stringLength] = 0;
 	free(utf8buffer);
 	free(buffer);
 }
