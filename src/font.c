@@ -203,20 +203,26 @@ void geDrawUnicodeString(GEfont* font, GEint x, GEint y, const GEunicodeCharacte
 */
 
 void geDrawUtf8String(GEfont* font, GEint x, GEint y, const GEchar* string) {
-	size_t stringLength = strlen(string);
-	size_t stringLengthCopy = stringLength;
-	size_t utf8bufferLength = stringLength * sizeof(GEunicodeCharacter);
-	GEchar* buffer = (GEchar*)malloc(stringLength + 1);
-	strcpy(buffer, string);
-	GEunicodeCharacter* utf8buffer = (GEunicodeCharacter*)malloc(utf8bufferLength + sizeof(GEchar));
-	GEchar* utf8bufferStart = (char*)utf8buffer;
-	GEchar* stringBufferStart = buffer;
-	if (ge_utf8ToUnicode) {
-		iconv(ge_utf8ToUnicode, &stringBufferStart, &stringLength, &utf8bufferStart, &utf8bufferLength);
+	if (ge_utf8ToUnicode == (iconv_t)-1) {
+		return;
 	}
-	utf8buffer[stringLengthCopy] = 0;
-	geDrawUnicodeString(font, x, y, utf8buffer);
-	free(utf8buffer);
+	
+	size_t bufferSize = strlen(string);
+	size_t bufferSizeCopy = bufferSize;
+	char* buffer = (char*)malloc(bufferSize + 1);
+	char* bufferPtr = buffer;
+	strcpy(buffer, string);
+	
+	size_t unicodeBufferSize = bufferSize * sizeof(GEunicodeCharacter);
+	char* unicodeBuffer= (char*)malloc(unicodeBufferSize + sizeof(GEunicodeCharacter));
+	char* unicodeBufferPtr = unicodeBuffer;
+	
+	iconv(ge_utf8ToUnicode, &bufferPtr, &bufferSize, &unicodeBufferPtr, &unicodeBufferSize);
+	((GEunicodeCharacter*)unicodeBuffer)[bufferSizeCopy] = 0;
+	
+	geDrawUnicodeString(font, x, y, (GEunicodeCharacter*)unicodeBuffer);
+
+	free(unicodeBuffer);
 	free(buffer);
 }
 

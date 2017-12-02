@@ -333,5 +333,5 @@ void geDrawUnicodeString(GEfont* font, GEint x, GEint y, const GEunicodeCharacte
 - [ ] Рисование прямоугольников и линий
 - [*] Понять почему FreeType2 половину символов рендерит криво - решение glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 - [ ] Создание поверхности из указателя
-- [ ] Печать utf8
+- [*] Печать utf8
 - [ ] Найти замену iconv, так как это какойто пи....ц

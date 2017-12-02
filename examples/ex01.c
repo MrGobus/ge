@@ -26,6 +26,7 @@ int main() {
 				geDrawUnicodeString(font, 20, 0, L"Привет мир form unicode");
 				geSetColor(1, 1, 0, 1);
 				geDrawUtf8String(font, 20, geGetFontSize(font), "Привет мир from uft8");
+				geSetColor(1, 0, 0, 1);
 			geEnd();
 			glfwSwapBuffers(window);
 		}
