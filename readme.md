@@ -17,9 +17,16 @@
 
 # Сборка
 
-Прилагаемый makefile создан для работы c [MSYS2](http://www.msys2.org/) - набор утилит и консоль для компилятора MinGW64.
+Порядок сборки:
 
-Для сборки в других системах может не подойти, так как могут быть использованы другие имена библиотек (например -lgl вместо -lopengl32 для linux) а также другие системные пути.
+```
+make
+make install
+```
+
+Прилагаемый makefile создан под [MSYS2](http://www.msys2.org/) - набор утилит и консоль для компилятора MinGW64.
+
+Для сборки в других средах и на других платформах не подойдет, так как могут быть использованы другие имена библиотек (например -lgl вместо -lopengl32 для linux) а также другие системные пути.
 
 makefile для сборки приложения с использованием библиотеки ge
 
@@ -36,6 +43,48 @@ default: clear
 clear:
 	rm -rf *.o
 	rm -rf $(TARGET)
+```
+
+# Пример кода
+
+```c
+#include <ge.h>
+
+/**
+	Обработчик ошибки
+	@param code - код ошибки
+	@param message - сообщение об ошибке
+*/
+
+void errorCallback(GEint code, const GEchar* message) {
+	fprintf(stderr, "error: %d\n%s\n", code, message);
+	geTerminate();
+	exit(code);
+}
+
+int main() {
+	if (geInit(640, 480, "Hello") == GE_OK) {
+		GLFWwindow* window = geGetGLFWwindow();
+		
+		GEsurface* surface = geLoadSurface("image.png");
+		
+		while (!glfwWindowShouldClose(window)) {
+			glfwPollEvents();
+			geBegin(GE_NULL);
+				GErect dstRect = {
+					10, 10,
+					geGetSurfaceWidth(surface), geGetSurfaceHeight(surface)
+				};
+				geBlitSurface(surface, &dstRect, GE_NULL);
+			geEnd();
+			glfwSwapBuffers(window);
+		}
+		
+		geDeleteSurface(surface);
+		geTerminate();		
+	}
+	return 0;
+}
 ```
 
 # Список функций
