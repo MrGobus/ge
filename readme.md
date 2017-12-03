@@ -1,5 +1,43 @@
 # 2D Graphic Engine GE
 
+Библиотека GE содержит набор функций для построения 2D графики.
+
+* Вывод изображении (surface, поверхности)
+* Загрузка изображений из файла
+* Построение (минимальное - линии, прямоугольники)
+* Вывод текста
+* Рендер на поверхность
+
+Используемые библиотеки
+
+* [GLFW3](http://www.glfw.org/) - создание окна, клавиатура, мышь и т.п. 
+* [GLEW](http://glew.sourceforge.net/) - получение функционала OpenGL 3.3
+* [DevIL](http://openil.sourceforge.net/) - загрузка изображений
+* [FreeType](https://www.freetype.org/) - шрифты
+
+# Сборка
+
+Прилагаемый makefile создан для работы c [MSYS2](http://www.msys2.org/) - набор утилит и консоль для компилятора MinGW64.
+
+Для сборки в других системах может не подойти, так как могут быть использованы другие имена библиотек (например -lgl вместо -lopengl32 для linux) а также другие системные пути.
+
+makefile для сборки приложения с использованием библиотеки ge
+
+```
+CC = gcc
+CFLAGS = -Wall `pkg-config --cflags freetype2` -O3
+LFLAGS = -lge -lglfw3 -lglew32 -lopengl32 -lIL -lfreetype -liconv
+TARGET = main.exe
+
+default: clear
+	$(CC) $(CFLAGS) -c main.c
+	$(CC) main.o $(LFLAGS) -o $(TARGET)
+	
+clear:
+	rm -rf *.o
+	rm -rf $(TARGET)
+```
+
 # Список функций
 
 ## Обработка ошибок

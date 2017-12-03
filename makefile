@@ -14,6 +14,11 @@ default: clear
 	
 	$(MAKE) -C examples
 	
+install:
+
+	cp -rf include/ge.h /mingw64/include/ge.h
+	cp -rf lib/libge.a /mingw64/lib/libge.a
+	
 clear:
 
 	rm -f *.o
