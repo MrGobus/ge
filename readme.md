@@ -428,6 +428,12 @@ void geDrawUnicodeCharacter(GEfont* font, GEint x, GEint y, GEunicodeCharacter c
 void geDrawUnicodeString(GEfont* font, GEint x, GEint y, const GEunicodeCharacter* string);
 ````
 
+Напечатать utf8 строку
+
+```c
+void geDrawUtf8String(GEfont* font, GEint x, GEint y, const GEchar* string)
+```
+
 # ToDo
 
 - [*] Сохранять состояние движка в geBegin и восстанавливать в geEnd
