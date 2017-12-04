@@ -124,7 +124,7 @@ const GEchar* geGetErrorMessage();
 Установить обработчик ошибок.
 
 ```c
-void geSetErrorCallback(GEerrorCallback callback);
+void geErrorCallback(GEerrorCallback callback);
 ```
 
 Получить обработчик ошибок.
@@ -181,6 +181,24 @@ void geBegin(GEsurface* surface);
 void geEnd();
 ```
 
+Нарисует прямоугольник
+
+```c
+void geRect(const GErect* rect);
+```
+
+Нарисует закрашенный прямоугольник
+
+```c
+void geFillRect(const GErect* rect);
+```
+
+Нарисует линию
+
+```c
+void geLine(GLint x1, GLint y1, GLint x2, GLint y2);
+```
+
 Вернет ширину окна
 
 ```c
@@ -208,7 +226,7 @@ GEint geGetScreenHeight();
 Установить глобальную прозрачность.
 
 ```c
-void geSetOpacity(GEfloat opacity);
+void geOpacity(GEfloat opacity);
 ```
 
 Вернет глобальную прозрачность
@@ -220,7 +238,7 @@ GEfloat geGetOpacity();
 Установить цвет закраски (прямоугольники, линии, текст, очистка экрана)
 
 ```c
-void geSetColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
+void geColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
 ```
 
 Получить цвет закраски
@@ -371,7 +389,7 @@ void geDeleteFont(GEfont* font);
 Изменить размер шрифта
 
 ```c
-void geSetFontSize(GEfont* font, GEint size);
+void geFontSize(GEfont* font, GEint size);
 ```
 
 Вернет размер шрифта

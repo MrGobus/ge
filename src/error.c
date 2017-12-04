@@ -46,7 +46,7 @@ const GEchar* geGetErrorMessage() {
 	@paran callback - обработчик ошибки
 */
 
-void geSetErrorCallback(GEerrorCallback callback) {
+void geErrorCallback(GEerrorCallback callback) {
 	ge_errorCallback = callback;
 }
 

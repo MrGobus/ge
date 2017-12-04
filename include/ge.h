@@ -40,7 +40,7 @@ typedef void (*GEerrorCallback) (GEint, const GEchar*);
 void geError(GEint code, const GEchar* message);
 GEint geGetErrorCode();
 const GEchar* geGetErrorMessage();
-void geSetErrorCallback(GEerrorCallback callback);
+void geErrorCallback(GEerrorCallback callback);
 GEerrorCallback geGetErrorCallback();
 
 GEint geInit(GEint width, GEint height, const GEchar* title);
@@ -99,7 +99,7 @@ typedef struct GEfont {
 
 GEfont* geLoadFont(const GEchar* fileName, GEint size);
 void geDeleteFont(GEfont* font);
-void geSetFontSize(GEfont* font, GEint size);
+void geFontSize(GEfont* font, GEint size);
 GEint geGetFontSize(GEfont* font);
 void geClearFontCache(GEfont* font);
 GEglyph* geGetGlyph(GEfont* font, GEunicodeCharacter character);
@@ -111,14 +111,14 @@ void geDrawUtf8String(GEfont* font, GEint x, GEint y, const GEchar* string);
 GEint geGetScreenWidth();
 GEint geGetScreenHeight();
 
-void geSetOpacity(GEfloat opacity);
+void geOpacity(GEfloat opacity);
 GEfloat geGetOpacity();
 
-void geSetColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
+void geColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
 void geGetColor(GEfloat* color);
 
-void geDrawRect(const GErect* rect);
-void geDrawFillRect(const GErect* rect);
+void geRect(const GErect* rect);
+void geFillRect(const GErect* rect);
 void geLine(GLint x1, GLint y1, GLint x2, GLint y2);
 
 void geClear();

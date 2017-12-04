@@ -232,7 +232,7 @@ void geDrawUtf8String(GEfont* font, GEint x, GEint y, const GEchar* string) {
 	@param size - размер
 */
 
-void geSetFontSize(GEfont* font, GEint size) {
+void geFontSize(GEfont* font, GEint size) {
 	FT_Set_Pixel_Sizes(font->face, 0, size);
 	font->size = size;
 }

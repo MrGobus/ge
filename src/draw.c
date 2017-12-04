@@ -3,7 +3,7 @@
 	@param rect - данные прямоугольника
 */
 
-void geDrawRect(const GErect* rect) {
+void geRect(const GErect* rect) {
 	glUniform1i(ge_shader.uniformLocation.enableTexture, 0);
 
 	GLfloat verticesData[8] = {
@@ -31,7 +31,7 @@ void geDrawRect(const GErect* rect) {
 	@param rect - данные прямоугольника
 */
 
-void geDrawFillRect(const GErect* rect) {
+void geFillRect(const GErect* rect) {
 	glUniform1i(ge_shader.uniformLocation.enableTexture, 0);
 
 	GLfloat verticesData[8] = {
@@ -60,5 +60,15 @@ void geDrawFillRect(const GErect* rect) {
 */
 
 void geLine(GLint x1, GLint y1, GLint x2, GLint y2) {
+	glUniform1i(ge_shader.uniformLocation.enableTexture, 0);
+
+	GLfloat verticesData[8] = {
+		x1,	y1,
+		x2,	y2
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, ge_rect.verticesBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(verticesData), verticesData);
 	
+	glDrawArrays(GL_LINES, 0, 2);
 }

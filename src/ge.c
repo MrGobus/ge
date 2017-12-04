@@ -430,7 +430,7 @@ void geEnd() {
 	@param opacity - прозрачность
 */
 
-void geSetOpacity(GEfloat opacity) {
+void geOpacity(GEfloat opacity) {
 	glUniform1f(ge_shader.uniformLocation.opacity, opacity);
 }
 
@@ -477,7 +477,7 @@ GEint geGetScreenHeight() {
 	@param a - a
 */
 
-void geSetColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a) {
+void geColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a) {
 	ge_color[0] = r;
 	ge_color[1] = g;
 	ge_color[2] = b;
