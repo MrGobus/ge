@@ -12,8 +12,6 @@ default: clear
 	$(CC) $(CFLAGS) -c src/ge.c
 	ar rc $(LIB_DIR)/libge.a ge.o
 	
-	$(MAKE) -C examples
-	
 install:
 
 	cp -rf include/ge.h /mingw64/include/ge.h

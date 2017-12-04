@@ -4,8 +4,26 @@
 */
 
 void geDrawRect(const GErect* rect) {
+	glUniform1i(ge_shader.uniformLocation.enableTexture, 0);
+
+	GLfloat verticesData[8] = {
+		rect->x,
+		rect->y,
+
+		rect->x,
+		rect->y + rect->height,
+
+		rect->x + rect->width,
+		rect->y + rect->height,
+
+		rect->x + rect->width,
+		rect->y
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, ge_rect.verticesBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(verticesData), verticesData);
 	
-	
+	glDrawArrays(GL_LINE_LOOP, 0, 4);
 }
 
 /**
@@ -14,7 +32,23 @@ void geDrawRect(const GErect* rect) {
 */
 
 void geDrawFillRect(const GErect* rect) {
+	glUniform1i(ge_shader.uniformLocation.enableTexture, 0);
+
+	GLfloat verticesData[8] = {
+		rect->x,
+		rect->y,
+		rect->x,
+		rect->y + rect->height,
+		rect->x + rect->width,
+		rect->y,
+		rect->x + rect->width,
+		rect->y + rect->height
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, ge_rect.verticesBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(verticesData), verticesData);
 	
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 /**

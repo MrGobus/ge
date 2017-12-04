@@ -117,6 +117,10 @@ GEfloat geGetOpacity();
 void geSetColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
 void geGetColor(GEfloat* color);
 
+void geDrawRect(const GErect* rect);
+void geDrawFillRect(const GErect* rect);
+void geLine(GLint x1, GLint y1, GLint x2, GLint y2);
+
 void geClear();
 
 void geBegin(GEsurface* surface);
