@@ -1,5 +1,5 @@
-GEint ge_errorCode = GE_OK; // Код ошибки
-GEchar* ge_errorMessage = GE_NULL; // Сообщение об ошибке
+int ge_errorCode = GE_OK; // Код ошибки
+char* ge_errorMessage = GE_NULL; // Сообщение об ошибке
 GEerrorCallback ge_errorCallback = GE_NULL; // Обработчик ошибки
 
 /**
@@ -9,13 +9,13 @@ GEerrorCallback ge_errorCallback = GE_NULL; // Обработчик ошибки
 	@param message - сообщение об ошибке, возможно GE_NULL
 */
 
-void geError(GEint code, const GEchar* message) {
+void geError(int code, const char* message) {
 	ge_errorCode = code;
 	if (ge_errorMessage) {
 		free(ge_errorMessage);
 	}
 	if (message) {
-		ge_errorMessage = (GEchar*)malloc(strlen(message) + 1);
+		ge_errorMessage = (char*)malloc(strlen(message) + 1);
 		strcpy(ge_errorMessage, message);
 	} else {
 		ge_errorMessage = GE_NULL;
@@ -29,7 +29,7 @@ void geError(GEint code, const GEchar* message) {
 	@return код ошибки
 */
 
-GEint geGetErrorCode() {
+int geGetErrorCode() {
 	return ge_errorCode;	
 }
 
@@ -37,7 +37,7 @@ GEint geGetErrorCode() {
 	@return сообщение об ошибке
 */
 
-const GEchar* geGetErrorMessage() {
+const char* geGetErrorMessage() {
 	return ge_errorMessage;
 }
 

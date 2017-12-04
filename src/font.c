@@ -5,7 +5,7 @@
 	@return шрифт или GE_NULL
 */
 
-GEfont* geLoadFont(const GEchar* fileName, GEint size) {
+GE_Font* geLoadFont(const char* fileName, int size) {
 	FT_Face ft_face;
 	FT_Error ft_error = FT_New_Face(ge_ft_library, fileName, 0, &ft_face);
 	if (ft_error) {
@@ -13,7 +13,7 @@ GEfont* geLoadFont(const GEchar* fileName, GEint size) {
 		return GE_NULL;
 	}
 	FT_Set_Pixel_Sizes(ft_face, 0, size);
-	GEfont* font = (GEfont*)malloc(sizeof(GEfont));
+	GE_Font* font = (GE_Font*)malloc(sizeof(GE_Font));
 	font->size = size;
 	font->cache = GE_NULL;	
 	font->face = ft_face;
@@ -25,9 +25,9 @@ GEfont* geLoadFont(const GEchar* fileName, GEint size) {
 	@param font - шрифт
 */
 
-void geClearFontCache(GEfont* font) {
+void geClearFontCache(GE_Font* font) {
 	while (font->cache) {
-		GEglyph* glyph = font->cache;
+		GE_Glyph* glyph = font->cache;
 		font->cache = glyph->next;
 		glDeleteTextures(1, &glyph->texture);
 		free(glyph);
@@ -39,13 +39,13 @@ void geClearFontCache(GEfont* font) {
 	@param font - шрифт
 */
 
-void geDeleteFont(GEfont* font) {
+void geDeleteFont(GE_Font* font) {
 	FT_Done_Face(font->face);
 	geClearFontCache(font);
 	free(font);	
 }
 
-inline GEuint nextpow2(GEuint n) {
+inline unsigned int nextpow2(unsigned int n) {
 	--n;
 	n |= n >> 1;
 	n |= n >> 2;
@@ -62,10 +62,10 @@ inline GEuint nextpow2(GEuint n) {
 	@return глиф или GE_NULL
 */
 
-GEglyph* geGetGlyph(GEfont* font, GEunicodeCharacter character) {
+GE_Glyph* geGetGlyph(GE_Font* font, wchar_t character) {
 	FT_Error ft_error;
 	
-	GEglyph* glyph = font->cache;
+	GE_Glyph* glyph = font->cache;
 	while (glyph) {
 		if ((glyph->character == character) && (glyph->size == font->size)) {
 			return glyph;
@@ -88,7 +88,7 @@ GEglyph* geGetGlyph(GEfont* font, GEunicodeCharacter character) {
 		return GE_NULL;
 	}
 	
-	glyph = (GEglyph*)malloc(sizeof(GEglyph));
+	glyph = (GE_Glyph*)malloc(sizeof(GE_Glyph));
 	glyph->next = font->cache;
 	font->cache = glyph;
 	
@@ -110,7 +110,7 @@ GEglyph* geGetGlyph(GEfont* font, GEunicodeCharacter character) {
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, glyph->rect.width, glyph->rect.height, 0, GL_RED, GL_UNSIGNED_BYTE, slot->bitmap.buffer);
 	
-	GLint swizzleMask[] = {GL_ONE, GL_ONE, GL_ONE, GL_RED};
+	int swizzleMask[] = {GL_ONE, GL_ONE, GL_ONE, GL_RED};
 	glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, swizzleMask);
 		
 	return glyph;
@@ -123,12 +123,12 @@ GEglyph* geGetGlyph(GEfont* font, GEunicodeCharacter character) {
 	@param y - y
 */
 
-void geDrawGlyph(GEglyph* glyph, GEint x, GEint y) {
+void geDrawGlyph(GE_Glyph* glyph, int x, int y) {
 	glUniform1i(ge_shader.uniformLocation.enableTexture, 1);
 	glUniform1i(ge_shader.uniformLocation.fontMode, 1);
 
-	GEint _x = x + glyph->rect.x;
-	GEint _y = y + glyph->rect.y;
+	int _x = x + glyph->rect.x;
+	int _y = y + glyph->rect.y;
 	
 	const GLfloat verticesData[8] = {
 		_x, _y,
@@ -165,8 +165,8 @@ void geDrawGlyph(GEglyph* glyph, GEint x, GEint y) {
 	@param character - unicode код символа
 */
 
-void geDrawUnicodeCharacter(GEfont* font, GEint x, GEint y, GEunicodeCharacter character) {
-	GEglyph* glyph = geGetGlyph(font, character);
+void geDrawUnicodeCharacter(GE_Font* font, int x, int y, wchar_t character) {
+	GE_Glyph* glyph = geGetGlyph(font, character);
 	if (glyph) {
 		geDrawGlyph(glyph, x, y);
 	}
@@ -180,12 +180,12 @@ void geDrawUnicodeCharacter(GEfont* font, GEint x, GEint y, GEunicodeCharacter c
 	@param string - unicode строка
 */
 
-void geDrawUnicodeString(GEfont* font, GEint x, GEint y, const GEunicodeCharacter* string) {
-	GEint cursorX = x;
-	GEint cursorY = y;
-	const GEunicodeCharacter* character = string;
+void geDrawUnicodeString(GE_Font* font, int x, int y, const wchar_t* string) {
+	int cursorX = x;
+	int cursorY = y;
+	const wchar_t* character = string;
 	while (*character) {
-		GEglyph* glyph = geGetGlyph(font, *character);
+		GE_Glyph* glyph = geGetGlyph(font, *character);
 		if (glyph) {
 			geDrawGlyph(glyph, cursorX, cursorY);
 			cursorX += glyph->advance;
@@ -202,7 +202,7 @@ void geDrawUnicodeString(GEfont* font, GEint x, GEint y, const GEunicodeCharacte
 	@param string - unicode строка
 */
 
-void geDrawUtf8String(GEfont* font, GEint x, GEint y, const GEchar* string) {
+void geDrawUtf8String(GE_Font* font, int x, int y, const char* string) {
 	if (ge_utf8ToUnicode == (iconv_t)-1) {
 		return;
 	}
@@ -213,14 +213,14 @@ void geDrawUtf8String(GEfont* font, GEint x, GEint y, const GEchar* string) {
 	char* bufferPtr = buffer;
 	strcpy(buffer, string);
 	
-	size_t unicodeBufferSize = bufferSize * sizeof(GEunicodeCharacter);
-	char* unicodeBuffer= (char*)malloc(unicodeBufferSize + sizeof(GEunicodeCharacter));
+	size_t unicodeBufferSize = bufferSize * sizeof(wchar_t);
+	char* unicodeBuffer= (char*)malloc(unicodeBufferSize + sizeof(wchar_t));
 	char* unicodeBufferPtr = unicodeBuffer;
 	
 	iconv(ge_utf8ToUnicode, &bufferPtr, &bufferSize, &unicodeBufferPtr, &unicodeBufferSize);
-	((GEunicodeCharacter*)unicodeBuffer)[bufferSizeCopy] = 0;
+	((wchar_t*)unicodeBuffer)[bufferSizeCopy] = 0;
 	
-	geDrawUnicodeString(font, x, y, (GEunicodeCharacter*)unicodeBuffer);
+	geDrawUnicodeString(font, x, y, (wchar_t*)unicodeBuffer);
 
 	free(unicodeBuffer);
 	free(buffer);
@@ -232,7 +232,7 @@ void geDrawUtf8String(GEfont* font, GEint x, GEint y, const GEchar* string) {
 	@param size - размер
 */
 
-void geFontSize(GEfont* font, GEint size) {
+void GE_FontSize(GE_Font* font, int size) {
 	FT_Set_Pixel_Sizes(font->face, 0, size);
 	font->size = size;
 }
@@ -242,6 +242,6 @@ void geFontSize(GEfont* font, GEint size) {
 	@return размер шрифта
 */
 
-GEint geGetFontSize(GEfont* font) {
+int geGetFontSize(GE_Font* font) {
 	return font->size;
 }

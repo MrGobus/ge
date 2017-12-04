@@ -4,8 +4,8 @@
 	@param height - высота
 */
 
-GEsurface* geCreateSurface(GEint width, GEint height) {
-	GEsurface* surface = (GEsurface*)malloc(sizeof(GEsurface));
+GE_Surface* geCreateSurface(int width, int height) {
+	GE_Surface* surface = (GE_Surface*)malloc(sizeof(GE_Surface));
 	surface->width = width;
 	surface->height = height;
 	glGenTextures(1, &surface->texture);
@@ -23,11 +23,11 @@ GEsurface* geCreateSurface(GEint width, GEint height) {
 	Загрузить поверхность из файла изображения
 */
 
-GEsurface* geLoadImage(const GEchar* fileName) {
+GE_Surface* geLoadImage(const char* fileName) {
 	ILuint image;
 	ilGenImages(1, &image);
 	if (ilLoadImage(fileName)) {
-		GEsurface* surface = (GEsurface*)malloc(sizeof(GEsurface));
+		GE_Surface* surface = (GE_Surface*)malloc(sizeof(GE_Surface));
 		ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
 		surface->width = ilGetInteger(IL_IMAGE_WIDTH);
 		surface->height = ilGetInteger(IL_IMAGE_HEIGHT);
@@ -51,7 +51,7 @@ GEsurface* geLoadImage(const GEchar* fileName) {
 	Удалить поверхность
 */
 
-void geDeleteSurface(GEsurface* surface) {
+void geDeleteSurface(GE_Surface* surface) {
 	surface->usageCounter--;
 	if (surface->usageCounter) {
 		return;
@@ -70,7 +70,7 @@ void geDeleteSurface(GEsurface* surface) {
 	@param dstRect - откуда (если GE_NULL используется все изображение)
 */
 
-void geBlitSurface(GEsurface* surface, const GErect* dstRect, const GErect* srcRect) {
+void geBlitSurface(GE_Surface* surface, const GE_Rect* dstRect, const GE_Rect* srcRect) {
 	GLfloat verticesData[8];
 	GLfloat texCoordData[8];
 	
@@ -166,7 +166,7 @@ void geBlitSurface(GEsurface* surface, const GErect* dstRect, const GErect* srcR
 	@param access - тип доступа (GE_READ_ONLY, GE_WRITE_ONLY, GE_READ_WRITE)
 */
 
-void* geMapSurface(GEsurface* surface, int access) {
+void* geMapSurface(GE_Surface* surface, int access) {
 	surface->access = access;
 	if (!surface->ptr) {
 		surface->ptr = (void*)malloc(surface->width * surface->height * 4);
@@ -183,7 +183,7 @@ void* geMapSurface(GEsurface* surface, int access) {
 	@param surface - поверхность
 */
 
-void geUnmapSurface(GEsurface* surface) {
+void geUnmapSurface(GE_Surface* surface) {
 	if (surface->access != GE_READ_ONLY) {
 		glBindTexture(GL_TEXTURE_2D, surface->texture);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, surface->width, surface->height, GL_BGRA, GL_UNSIGNED_BYTE, surface->ptr);
@@ -197,7 +197,7 @@ void geUnmapSurface(GEsurface* surface) {
 	@param surface - поверхность
 */
 
-void geUpdateSurface(GEsurface* surface) {
+void geUpdateSurface(GE_Surface* surface) {
 	if (surface->access != GE_READ_ONLY) {
 		glBindTexture(GL_TEXTURE_2D, surface->texture);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, surface->width, surface->height, GL_BGRA, GL_UNSIGNED_BYTE, surface->ptr);
@@ -209,7 +209,7 @@ void geUpdateSurface(GEsurface* surface) {
 	@return ширина
 */
 
-GEint geGetSurfaceWidth(const GEsurface* surface) {
+int geGetSurfaceWidth(const GE_Surface* surface) {
 	return surface->width;	
 }
 
@@ -218,7 +218,7 @@ GEint geGetSurfaceWidth(const GEsurface* surface) {
 	@return высота
 */
 
-GEint geGetSurfaceHeight(const GEsurface* surface) {
+int geGetSurfaceHeight(const GE_Surface* surface) {
 	return surface->height;
 }
 
@@ -227,7 +227,7 @@ GEint geGetSurfaceHeight(const GEsurface* surface) {
 	@return тип разметки
 */
 
-GEint geGetSurfaceAccess(const GEsurface* surface) {
+int geGetSurfaceAccess(const GE_Surface* surface) {
 	return surface->access;
 }
 
@@ -236,6 +236,6 @@ GEint geGetSurfaceAccess(const GEsurface* surface) {
 	@return указатель на размеченный данные
 */
 
-GEvoid* geGetSurfacePtr(const GEsurface* surface) {
+void* geGetSurfacePtr(const GE_Surface* surface) {
 	return surface->ptr;
 }

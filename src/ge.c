@@ -4,21 +4,21 @@
 
 iconv_t ge_utf8ToUnicode = (iconv_t)-1;
 
-GEfloat ge_color[4];
+float ge_color[4];
 
 FT_Library ge_ft_library = 0;
 
 typedef struct GEstate {
 	struct GEstate* next;
-	GEsurface* surface;
-	GEfloat opacity;
-	GEfloat clearColor[4];
+	GE_Surface* surface;
+	float opacity;
+	float clearColor[4];
 } GEstate;
 
 GEstate* ge_stateStack = GE_NULL;
 
-GEint ge_ilInitStatus = 0;
-GEint ge_FreeTypeInitState = 0;
+int ge_ilInitStatus = 0;
+int ge_FreeTypeInitState = 0;
 
 GLFWwindow* ge_window = GE_NULL; // Окно GLFW3
 
@@ -58,18 +58,18 @@ const GLchar* fragmentShaderSource[] = {
 	"}"
 };
 
-GEint ge_screenWidth = 0;
-GEint ge_screenHeight = 0;
+int ge_screenWidth = 0;
+int ge_screenHeight = 0;
 
 struct {
 	GLuint program;
 	struct UniformLocation {
-		GLint projectionMatrix;
-		GLint textureSampler;
-		GLint enableTexture;
-		GLint color;
-		GLint opacity;
-		GLint fontMode;
+		int projectionMatrix;
+		int textureSampler;
+		int enableTexture;
+		int color;
+		int opacity;
+		int fontMode;
 	} uniformLocation;
 } ge_shader = {
 	0, // program
@@ -122,11 +122,11 @@ void ge_glfwErrorCallback(int code, const char* message) {
 	@retrun статус выполнения
 */
 
-GEint geInit(GEint width, GEint height, const GEchar* title) {
+int geInit(int width, int height, const char* title) {
 	GLuint vertexShader = 0;
 	GLuint fragmentShader = 0;
-	GLint status;
-	GLint infoLogLength;
+	int status;
+	int infoLogLength;
 	
 	//ge_utf8ToUnicode = iconv_open("UTF-32", "UTF-8");
 	ge_utf8ToUnicode = iconv_open("wchar_t", "utf-8");
@@ -194,7 +194,7 @@ GEint geInit(GEint width, GEint height, const GEchar* title) {
 			free(ge_errorMessage);
 		}
 		glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &infoLogLength);
-		ge_errorMessage = (GEchar*)malloc(infoLogLength + 1);
+		ge_errorMessage = (char*)malloc(infoLogLength + 1);
 		glGetShaderInfoLog(vertexShader, infoLogLength, 0, ge_errorMessage);
 		ge_errorMessage[infoLogLength] = 0;
 		if (ge_errorCallback) {
@@ -212,7 +212,7 @@ GEint geInit(GEint width, GEint height, const GEchar* title) {
 			free(ge_errorMessage);
 		}
 		glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &infoLogLength);
-		ge_errorMessage = (GEchar*)malloc(infoLogLength + 1);
+		ge_errorMessage = (char*)malloc(infoLogLength + 1);
 		glGetShaderInfoLog(fragmentShader, infoLogLength, 0, ge_errorMessage);
 		ge_errorMessage[infoLogLength] = 0;
 		if (ge_errorCallback) {
@@ -231,7 +231,7 @@ GEint geInit(GEint width, GEint height, const GEchar* title) {
 			free(ge_errorMessage);
 		}
 		glGetProgramiv(ge_shader.program, GL_INFO_LOG_LENGTH, &infoLogLength);
-		ge_errorMessage = (GEchar*)malloc(infoLogLength + 1);
+		ge_errorMessage = (char*)malloc(infoLogLength + 1);
 		glGetProgramInfoLog(ge_shader.program, infoLogLength, 0, ge_errorMessage);
 		ge_errorMessage[infoLogLength] = 0;
 		if (ge_errorCallback) {
@@ -393,7 +393,7 @@ void ge_setState(GEstate* state) {
 	@param surface - поверхность на которую нужно выводить изображение
 */
 
-void geBegin(GEsurface* surface) {
+void geBegin(GE_Surface* surface) {
 	GEstate* state = (GEstate*)malloc(sizeof(GEstate));
 	state->next = ge_stateStack;
 	ge_stateStack = state->next;
@@ -430,7 +430,7 @@ void geEnd() {
 	@param opacity - прозрачность
 */
 
-void geOpacity(GEfloat opacity) {
+void geOpacity(float opacity) {
 	glUniform1f(ge_shader.uniformLocation.opacity, opacity);
 }
 
@@ -438,7 +438,7 @@ void geOpacity(GEfloat opacity) {
 	@retrun прозрачность
 */
 
-GEfloat geGetOpacity() {
+float geGetOpacity() {
 	GLfloat opacity;
 	glGetUniformfv(ge_shader.program, ge_shader.uniformLocation.opacity, &opacity);
 	return opacity;	
@@ -457,7 +457,7 @@ void geClear() {
 	@retrun ширина экрана
 */
 
-GEint geGetScreenWidth() {
+int geGetScreenWidth() {
 	return ge_screenWidth;
 }
 
@@ -465,7 +465,7 @@ GEint geGetScreenWidth() {
 	@retrun высота экрана
 */
 
-GEint geGetScreenHeight() {
+int geGetScreenHeight() {
 	return ge_screenHeight;
 }
 
@@ -490,6 +490,6 @@ void geColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a) {
 	@param color - указатель куда записать цвет
 */
 
-void geGetColor(GEfloat* color) {
-	memcpy(color, ge_color, sizeof(GEfloat) * 4);
+void geGetColor(float* color) {
+	memcpy(color, ge_color, sizeof(float) * 4);
 }

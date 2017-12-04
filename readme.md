@@ -56,7 +56,7 @@ clear:
 	@param message - сообщение об ошибке
 */
 
-void errorCallback(GEint code, const GEchar* message) {
+void errorCallback(int code, const char* message) {
 	fprintf(stderr, "error: %d\n%s\n", code, message);
 	geTerminate();
 	exit(code);
@@ -66,12 +66,12 @@ int main() {
 	if (geInit(640, 480, "Hello") == GE_OK) {
 		GLFWwindow* window = geGetGLFWwindow();
 		
-		GEsurface* surface = geLoadImage("image.png");
+		GE_Surface* surface = geLoadImage("image.png");
 		
 		while (!glfwWindowShouldClose(window)) {
 			glfwPollEvents();
 			geBegin(GE_NULL);
-				GErect dstRect = {
+				GE_Rect dstRect = {
 					10, 10,
 					geGetSurfaceWidth(surface), geGetSurfaceHeight(surface)
 				};
@@ -94,20 +94,20 @@ int main() {
 Тип для обработчика ошибок.
 
 ```c
-typedef void (*GEerrorCallback) (GEint, const GEchar*)
+typedef void (*GEerrorCallback) (int, const char*)
 ```
 
 Генерация ошибки. 
 Параметры код ошибки и сообщение. Вызовет обработчик ошибки если он установлен.
 
 ```c
-void geError(GEint code, const GEchar* message);
+void geError(int code, const char* message);
 ```
 
 Получить код последней ошибки.
 
 ```c
-GEint geGetErrorCode();
+int geGetErrorCode();
 ```
 
 ```
@@ -118,7 +118,7 @@ GE_ERROR - ошибка
 Получить сообщение об ошибке.
 
 ```c
-const GEchar* geGetErrorMessage();
+const char* geGetErrorMessage();
 ```
 
 Установить обработчик ошибок.
@@ -139,7 +139,7 @@ GEerrorCallback geGetErrorCallback();
 Параметры - размер окна и заголовок.
 
 ```c
-GEint geInit(GEint width, GEint height, const GEchar* title);
+int geInit(int width, int height, const char* title);
 ```
 
 Завершение работы библиотеки.
@@ -159,12 +159,12 @@ GLFWwindow* geGetGLFWwindow();
 Описывает прямоугольную область по координатам x, y размерами width, height
 
 ```c
-typedef struct GErect {
-	GEint x;
-	GEint y;
-	GEint width;
-	GEint height;
-} GErect;
+typedef struct GE_Rect {
+	int x;
+	int y;
+	int width;
+	int height;
+} GE_Rect;
 ```
 
 ## Рисование
@@ -172,7 +172,7 @@ typedef struct GErect {
 Начать процесс рисования. Если surface == GE_NULL вывод будет в окно иначе в заданную поверхность.
 
 ```c
-void geBegin(GEsurface* surface);
+void geBegin(GE_Surface* surface);
 ```
 
 Завершить процесс рисования
@@ -184,55 +184,43 @@ void geEnd();
 Нарисует прямоугольник
 
 ```c
-void geRect(const GErect* rect);
+void GE_Rect(const GE_Rect* rect);
 ```
 
 Нарисует закрашенный прямоугольник
 
 ```c
-void geFillRect(const GErect* rect);
+void geFillRect(const GE_Rect* rect);
 ```
 
 Нарисует линию
 
 ```c
-void geLine(GLint x1, GLint y1, GLint x2, GLint y2);
-```
-
-Вернет ширину окна
-
-```c
-GEint geGetWindowWidth();
-```
-
-Вернет высоту окна
-
-```c
-GEint geGetWindowHeight();
+void geLine(int x1, int y1, int x2, int y2);
 ```
 
 Вернет ширину экрана - окна либо поверхности на которую производится рендер.
 
 ```c
-GEint geGetScreenWidth();
+int geGetScreenWidth();
 ```
 
 Вернет высоту экрана - окна либо поверхности на которую производится рендер.
 
 ```c
-GEint geGetScreenHeight();
+int geGetScreenHeight();
 ```
 
 Установить глобальную прозрачность.
 
 ```c
-void geOpacity(GEfloat opacity);
+void geOpacity(float opacity);
 ```
 
 Вернет глобальную прозрачность
 
 ```c
-GEfloat geGetOpacity();
+float geGetOpacity();
 ```
 
 Установить цвет закраски (прямоугольники, линии, текст, очистка экрана)
@@ -244,7 +232,7 @@ void geColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
 Получить цвет закраски
 
 ```c
-void geGetColor(GEfloat* color);
+void geGetColor(float* color);
 ```
 
 Очистить экран
@@ -260,32 +248,32 @@ void geClear();
 Тип поверхности.
 
 ```c
-typedef struct GEsurface {
+typedef struct GE_Surface {
 	GLuint texture;
-	GEint width;
-	GEint height;
-	GEint access;
-	GEvoid* ptr;
-	GEint usageCounter;
-} GEsurface;
+	int width;
+	int height;
+	int access;
+	void* ptr;
+	int usageCounter;
+} GE_Surface;
 ```
 
 Создать поверхность заданного размера.
 
 ```c
-GEsurface* geCreateSurface(GEint width, GEint height);
+GE_Surface* geCreateSurface(int width, int height);
 ```
 
 Удалить поверхность.
 
 ```c
-void geDeleteSurface(GEsurface* surface);
+void geDeleteSurface(GE_Surface* surface);
 ```
 
 Загрузить файл изображения как поверхность. 
 
 ```c
-GEsurface* geLoadImage(const GEchar* fileName);
+GE_Surface* geLoadImage(const char* fileName);
 ```
 
 Копировать часть поверхности surface в зону заданную прямоугольником dstRect из зоны заданной прямоугольником srcRect.
@@ -294,7 +282,7 @@ GEsurface* geLoadImage(const GEchar* fileName);
 Если srcRect = GE_NULL то будет скопирована вся поверхность. 
 
 ```c
-void geBlitSurface(GEsurface* surface, const GErect* dstRect, const GErect* srcRect);
+void geBlitSurface(GE_Surface* surface, const GE_Rect* dstRect, const GE_Rect* srcRect);
 ```
 
 Разметить поверхность. Копировать содержимое поверхности из видеопамяти в обычную память и предоставить доступ к размеченным данным. 
@@ -308,44 +296,44 @@ GL_READ_WRITE - чтение и запись
 Функция вернет указатель на данные.
 
 ```c
-void* geMapSurface(GEsurface* surface, int access);
+void* geMapSurface(GE_Surface* surface, int access);
 ```
 
 Завершить разметку. 
 
 ```c
-void geUnmapSurface(GEsurface* surface);
+void geUnmapSurface(GE_Surface* surface);
 ```
 
 Обновить разметку. 
 Если поверхность размечена, данные будут помещены из памяти на поверхность но разметка не завершиться.
 
 ```c
-void geUpdateSurface(GEsurface* surface);
+void geUpdateSurface(GE_Surface* surface);
 ```
 
 Вернет ширину поверхности
 
 ```c
-GEint geGetSurfaceWidth(const GEsurface* surface);
+int geGetSurfaceWidth(const GE_Surface* surface);
 ```
 
 Вернет высоту поверхности
 
 ```c
-GEint geGetSurfaceHeight(const GEsurface* surface);
+int geGetSurfaceHeight(const GE_Surface* surface);
 ```
 
 Вернет тип доступа размеченной поверхности либо GE_NONE если поверхность не размечена.
 
 ```c
-GEint geGetSurfaceAccess(const GEsurface* surface);
+int geGetSurfaceAccess(const GE_Surface* surface);
 ```
 
 Вернет указатель на данные размеченной поверхности.
 
 ```c
-GEvoid* geGetSurfacePtr(const GEsurface* surface);
+void* geGetSurfacePtr(const GE_Surface* surface);
 ```
 
 ## Шрифты и вывод текста
@@ -353,85 +341,85 @@ GEvoid* geGetSurfacePtr(const GEsurface* surface);
 Данные о изображении символа.
 
 ```c
-typedef struct GEglyph {
-	struct GEglyph* next;
-	GEunicodeCharacter character;
-	GEint size;
-	GErect rect;
+typedef struct GE_Glyph {
+	struct GE_Glyph* next;
+	wchar_t character;
+	int size;
+	GE_Rect rect;
 	GLuint texture;
-	GEint advance;
-} GEglyph;
+	int advance;
+} GE_Glyph;
 ```
 
 Шрифт. 
 Шрифт кеширует используемые глифы при для быстрого повторного использования. 
 
 ```c
-typedef struct GEfont {
+typedef struct GE_Font {
 	FT_Face face;
-	GEint size;
-	GEglyph* cache;	
-} GEfont;
+	int size;
+	GE_Glyph* cache;	
+} GE_Font;
 ```
 
 Загрузить шрифт
 
 ```c
-GEfont* geLoadFont(const GEchar* fileName, GEint size);
+GE_Font* geLoadFont(const char* fileName, int size);
 ```
 
 Удалить шрифт
 
 ```с
-void geDeleteFont(GEfont* font);
+void geDeleteFont(GE_Font* font);
 ```
 
 Изменить размер шрифта
 
 ```c
-void geFontSize(GEfont* font, GEint size);
+void GE_FontSize(GE_Font* font, int size);
 ```
 
 Вернет размер шрифта
 
 ```c
-GEint geGetFontSize(GEfont* font);
+int geGetFontSize(GE_Font* font);
 ```
 
 Очистить кеш глифов шрифта
 
 ```c
-void geClearFontCache(GEfont* font);
+void geClearFontCache(GE_Font* font);
 ```
 
 Получить глиф для unicode символа 
 
 ```c
-GEglyph* geGetGlyph(GEfont* font, GEunicodeCharacter character);
+GE_Glyph* geGetGlyph(GE_Font* font, wchar_t character);
 ```
 
 Нарисовать глиф
 
 ```c
-void geDrawGlyph(GEglyph* glyph, GEint x, GEint y);
+void geDrawGlyph(GE_Glyph* glyph, int x, int y);
 ```
 
 Напечатать unicode символ
 
 ```c
-void geDrawUnicodeCharacter(GEfont* font, GEint x, GEint y, GEunicodeCharacter character);
+void geDrawUnicodeCharacter(GE_Font* font, int x, int y, wchar_t character);
 ```
 
 Напечатать unicode строку
 
 ```c
-void geDrawUnicodeString(GEfont* font, GEint x, GEint y, const GEunicodeCharacter* string);
+void geDrawUnicodeString(GE_Font* font, int x, int y, const wchar_t* string);
 ````
 
 Напечатать utf8 строку
 
 ```c
-void geDrawUtf8String(GEfont* font, GEint x, GEint y, const GEchar* string)
+void geDrawUtf8String(GE_Font* font, int x, int y, const char* string)
 ```
 
 # ToDo
@@ -441,7 +429,7 @@ void geDrawUtf8String(GEfont* font, GEint x, GEint y, const GEchar* string)
 - [*] Рендер на поверхность
 - [*] Шрифты
 - [ ] Блит с экрана если указано GE_NULL
-- [ ] Рисование прямоугольников и линий
+- [*] Рисование прямоугольников и линий
 - [*] Понять почему FreeType2 половину символов рендерит криво - решение glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 - [ ] Создание поверхности из указателя
 - [*] Печать utf8
