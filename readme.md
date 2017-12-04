@@ -66,7 +66,7 @@ int main() {
 	if (geInit(640, 480, "Hello") == GE_OK) {
 		GLFWwindow* window = geGetGLFWwindow();
 		
-		GEsurface* surface = geLoadSurface("image.png");
+		GEsurface* surface = geLoadImage("image.png");
 		
 		while (!glfwWindowShouldClose(window)) {
 			glfwPollEvents();
@@ -267,7 +267,7 @@ void geDeleteSurface(GEsurface* surface);
 Загрузить файл изображения как поверхность. 
 
 ```c
-GEsurface* geLoadSurface(const GEchar* fileName);
+GEsurface* geLoadImage(const GEchar* fileName);
 ```
 
 Копировать часть поверхности surface в зону заданную прямоугольником dstRect из зоны заданной прямоугольником srcRect.

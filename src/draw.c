@@ -5,6 +5,7 @@
 
 void geDrawRect(const GErect* rect) {
 	
+	
 }
 
 /**
@@ -13,5 +14,17 @@ void geDrawRect(const GErect* rect) {
 */
 
 void geDrawFillRect(const GErect* rect) {
+	
+}
+
+/**
+	Рисует линию
+	@param x1 - x1
+	@param y1 - y1
+	@param x2 - x2
+	@param y2 - y2
+*/
+
+void geLine(GLint x1, GLint y1, GLint x2, GLint y2) {
 	
 }

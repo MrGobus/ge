@@ -70,7 +70,7 @@ typedef struct GEsurface {
 } GEsurface;
 
 GEsurface* geCreateSurface(GEint width, GEint height);
-GEsurface* geLoadSurface(const GEchar* fileName);
+GEsurface* geLoadImage(const GEchar* fileName);
 void geDeleteSurface(GEsurface* surface);
 void geBlitSurface(GEsurface* surface, const GErect* dstRect, const GErect* srcRect);
 void* geMapSurface(GEsurface* surface, int access);

@@ -23,7 +23,7 @@ GEsurface* geCreateSurface(GEint width, GEint height) {
 	Загрузить поверхность из файла изображения
 */
 
-GEsurface* geLoadSurface(const GEchar* fileName) {
+GEsurface* geLoadImage(const GEchar* fileName) {
 	ILuint image;
 	ilGenImages(1, &image);
 	if (ilLoadImage(fileName)) {
