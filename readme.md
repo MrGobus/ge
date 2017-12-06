@@ -70,12 +70,12 @@ int main() {
 		
 		while (!glfwWindowShouldClose(window)) {
 			glfwPollEvents();
-			geBegin(GE_NULL);
+			geBegin(NULL);
 				GE_Rect dstRect = {
 					10, 10,
 					geGetSurfaceWidth(surface), geGetSurfaceHeight(surface)
 				};
-				geBlitSurface(surface, &dstRect, GE_NULL);
+				geBlitSurface(surface, &dstRect, NULL);
 			geEnd();
 			glfwSwapBuffers(window);
 		}
@@ -169,7 +169,7 @@ typedef struct GE_Rect {
 
 ## Рисование
 
-Начать процесс рисования. Если surface == GE_NULL вывод будет в окно иначе в заданную поверхность.
+Начать процесс рисования. Если surface == NULL вывод будет в окно иначе в заданную поверхность.
 
 ```c
 void geBegin(GE_Surface* surface);
@@ -277,9 +277,9 @@ GE_Surface* geLoadImage(const char* fileName);
 ```
 
 Копировать часть поверхности surface в зону заданную прямоугольником dstRect из зоны заданной прямоугольником srcRect.
-Если surface = GE_NULL то будет использовать поверхность окна
-Если dstRect = GE_NULL то вывод будет по координатам 0, 0 в размер поверхности. 
-Если srcRect = GE_NULL то будет скопирована вся поверхность. 
+Если surface = NULL то будет использовать поверхность окна
+Если dstRect = NULL то вывод будет по координатам 0, 0 в размер поверхности. 
+Если srcRect = NULL то будет скопирована вся поверхность. 
 
 ```c
 void geBlitSurface(GE_Surface* surface, const GE_Rect* dstRect, const GE_Rect* srcRect);
@@ -428,7 +428,7 @@ void geDrawUtf8String(GE_Font* font, int x, int y, const char* string)
 - [*] Разметка поверхностей
 - [*] Рендер на поверхность
 - [*] Шрифты
-- [ ] Блит с экрана если указано GE_NULL
+- [ ] Блит с экрана если указано NULL
 - [*] Рисование прямоугольников и линий
 - [*] Понять почему FreeType2 половину символов рендерит криво - решение glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 - [ ] Создание поверхности из указателя
