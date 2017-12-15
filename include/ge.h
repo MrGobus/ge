@@ -88,7 +88,7 @@ typedef struct GE_Font {
 
 GE_Font* geLoadFont(const char* fileName, int size);
 void geDeleteFont(GE_Font* font);
-void GE_FontSize(GE_Font* font, int size);
+void geFontSize(GE_Font* font, int size);
 int geGetFontSize(GE_Font* font);
 void geClearFontCache(GE_Font* font);
 GE_Glyph* geGetGlyph(GE_Font* font, wchar_t character);

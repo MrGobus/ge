@@ -214,7 +214,7 @@ void geDrawUtf8String(GE_Font* font, int x, int y, const char* string) {
 	strcpy(buffer, string);
 	
 	size_t unicodeBufferSize = bufferSize * sizeof(wchar_t);
-	char* unicodeBuffer= (char*)malloc(unicodeBufferSize + sizeof(wchar_t));
+	char* unicodeBuffer = (char*)malloc(unicodeBufferSize + sizeof(wchar_t));
 	char* unicodeBufferPtr = unicodeBuffer;
 	
 	iconv(ge_utf8ToUnicode, &bufferPtr, &bufferSize, &unicodeBufferPtr, &unicodeBufferSize);
@@ -232,7 +232,7 @@ void geDrawUtf8String(GE_Font* font, int x, int y, const char* string) {
 	@param size - размер
 */
 
-void GE_FontSize(GE_Font* font, int size) {
+void geFontSize(GE_Font* font, int size) {
 	FT_Set_Pixel_Sizes(font->face, 0, size);
 	font->size = size;
 }
